@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF File Management</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container mt-5">
+  <h2>PDF File Management</h2>
+  <button class="btn btn-success mt-3 mb-3" id="addPdfBtn">Add PDF</button>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>File Name</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="pdfList">
+      <!-- PDF files will be appended here -->
+    </tbody>
+  </table>
+</div>
+
+<!-- Bootstrap JS and jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+  // Function to add PDF file to table
+  function addPdf(fileName) {
+    var row = "<tr>" +
+                "<td>" + fileName + "</td>" +
+                "<td>" +
+                  "<button class='btn btn-danger btn-action delete-pdf'>Delete</button>" +
+                  "<input type='file' class='update-pdf' style='display: none;' accept='.pdf'>" +
+                  "<button class='btn btn-primary btn-action update-pdf-btn'>Update</button>" +
+                "</td>" +
+              "</tr>";
+    $("#pdfList").append(row);
+  }
+
+  // Add PDF Button Click Event
+  $("#addPdfBtn").click(function() {
+    // Create a file input element dynamically
+    var fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.pdf';
+    fileInput.style.display = 'none';
+    // Trigger click event on the file input element
+    $(fileInput).on('change', function() {
+      var fileName = $(this).val().split('\\').pop(); // Extract file name
+      addPdf(fileName);
+    }).click();
+  });
+
+  // Delete PDF Button Click Event
+  $(document).on("click", ".delete-pdf", function() {
+    $(this).closest("tr").remove();
+  });
+
+  // Update PDF Button Click Event
+  $(document).on("click", ".update-pdf-btn", function() {
+    $(this).siblings(".update-pdf").click();
+  });
+
+  // Handle file selection for update
+  $(document).on("change", ".update-pdf", function() {
+    var fileName = $(this).val().split('\\').pop(); // Extract file name
+    $(this).closest("td").siblings("td").text(fileName); // Update file name in the table
+  });
+</script>
+
+</body>
+</html>
